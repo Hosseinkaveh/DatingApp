@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DatingApp_Api.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class WeatherForecastController : BaseController
     {
         private static readonly string[] Summaries = new[]

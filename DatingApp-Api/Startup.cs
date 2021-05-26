@@ -31,6 +31,7 @@ namespace DatingApp_Api
             services.AddApplicationService(_config);
 
             services.AddControllers();
+            services.AddCors();
             services.AddIdentityService(_config);
             services.AddSwaggerGen(c =>
             {
@@ -51,6 +52,10 @@ namespace DatingApp_Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(x => x.AllowAnyHeader()
+                .AllowAnyMethod()
+                .WithOrigins("http://localhost:4200"));
 
             app.UseAuthentication();
             app.UseAuthorization();

@@ -1,0 +1,58 @@
+ <header class="p-3 bg-dark text-white">
+  <div class="container">
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a href="#" class="navbar-brand">DatingApp</a>
+      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0" *ngIf="accountService.currentUser$" >
+          <li><a href="#" class="nav-link px-2 text-secondary">Home</a></li>
+          <li><a href="#" class="nav-link px-2 text-white">Features</a></li>
+          <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
+          <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
+          <li><a href="/" (click)="LogOut()" class="nav-link px-2 text-white">About</a></li>
+      </ul>
+      
+      <div class="dropdown text-end" dropdown *ngIf="accountService.currentUser$ | async">
+        <a href="#" class="d-block text-white text-decoration-none dropdown-toggle" dropdownToggle >
+          <img src="https://github.com/mdo.png" alt="mdo" width="42" height="42" class="rounded-circle" >
+          Welcome User
+        </a>
+        <ul class="dropdown-menu text-small mt-3" *bsDropdownMenu >
+          <li><a class="dropdown-item" href="#">New project...</a></li>
+          <li><a class="dropdown-item" href="#">Settings</a></li>
+          <li><a class="dropdown-item" href="#">Profile</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a href="/" class="dropdown-item" (click)="LogOut()">Sign out</a></li>
+        </ul>
+      </div>
+
+
+<div style="display: inline-flex;" class="ms-5" *ngIf="(accountService.currentUser$ | async) == null" >
+      <form  class="row g-2 col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" #loginForm="ngForm" (ngSubmit)="login()" id="loginForm" autocomplete="off" *ngIf="(accountService.currentUser$ | async) == null">
+        <div class="col">
+          <input
+          name="UserName"
+          [(ngModel)]="model.UserName"
+          type="search"
+          class="form-control form-control-dark"
+          placeholder="UserName">
+        </div>
+       <div class="col">
+          <input
+          name="Password"
+          [(ngModel)]="model.Password"
+          type="search"
+          class="form-control form-control-dark"
+          placeholder="Password"
+          type="password">
+        </div>
+      </form>
+
+      <div class="text-end ms-2 ">
+        <button type="button" class="btn btn-outline-light me-2" form="loginForm" type="submit">Login</button>
+        <button type="button" class="btn btn-warning">Sign-up</button>
+
+
+      </div>
+    </div>
+</div>
+  </div>
+</header>
