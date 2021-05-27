@@ -1,15 +1,18 @@
  <header class="p-3 bg-dark text-white">
   <div class="container">
     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-        <a href="#" class="navbar-brand">DatingApp</a>
-      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0" *ngIf="accountService.currentUser$" >
-          <li><a href="#" class="nav-link px-2 text-secondary">Home</a></li>
-          <li><a href="#" class="nav-link px-2 text-white">Features</a></li>
-          <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
-          <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
-          <li><a href="/" (click)="LogOut()" class="nav-link px-2 text-white">About</a></li>
+        <a class="navbar-brand" routerLink='/'  routerLinkActive='active' [routerLinkActiveOptions]="{exact: true}">DatingApp</a>
+
+      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"  >
+        
+        <ng-container *ngIf="accountService.currentUser$ | async">
+          <li><a class="nav-link px-2 " routerLink='/members' routerLinkActive='active'>Matches</a></li>
+          <li><a class="nav-link px-2 " routerLink='/lists' routerLinkActive='active'>List</a></li>
+          <li><a class="nav-link px-2 " routerLink='/messages'  routerLinkActive='active'>Messages</a></li>
+        </ng-container>
+
       </ul>
-      
+
       <div class="dropdown text-end" dropdown *ngIf="accountService.currentUser$ | async">
         <a href="#" class="d-block text-white text-decoration-none dropdown-toggle" dropdownToggle >
           <img src="https://github.com/mdo.png" alt="mdo" width="42" height="42" class="rounded-circle" >
@@ -44,6 +47,7 @@
           placeholder="Password"
           type="password">
         </div>
+        <div class="text-danger" toastContainer></div>
       </form>
 
       <div class="text-end ms-2 ">
