@@ -1,4 +1,6 @@
 using DatingApp_Api.Data;
+using DatingApp_Api.Data.Repository;
+using DatingApp_Api.Helpers;
 using DatingApp_Api.Interface;
 using DatingApp_Api.Service;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +15,8 @@ namespace DatingApp_Api.Extension
           this  IServiceCollection services,IConfiguration config)
         {
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IUserRepository,UserRepository>();
+            services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
             services.AddDbContext<DataContext>(options =>{
                 options.UseSqlServer(config.GetConnectionString("DefaultConnection"));
             });

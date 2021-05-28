@@ -4,11 +4,12 @@
         <a class="navbar-brand" routerLink='/'  routerLinkActive='active' [routerLinkActiveOptions]="{exact: true}">DatingApp</a>
 
       <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"  >
-        
+
         <ng-container *ngIf="accountService.currentUser$ | async">
           <li><a class="nav-link px-2 " routerLink='/members' routerLinkActive='active'>Matches</a></li>
           <li><a class="nav-link px-2 " routerLink='/lists' routerLinkActive='active'>List</a></li>
           <li><a class="nav-link px-2 " routerLink='/messages'  routerLinkActive='active'>Messages</a></li>
+          <li><a class="nav-link px-2 " routerLink='/error'  routerLinkActive='active'>error</a></li>
         </ng-container>
 
       </ul>

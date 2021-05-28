@@ -1,22 +1,19 @@
 using System;
 using System.Collections.Generic;
-
-namespace DatingApp_Api.Enitites
+namespace DatingApp_Api.DTOs
 {
-    public class AppUser
+    public class MemberDto
     {
-        public int Id { get; set; }
-        public string UserName { get; set; }
+          public int Id { get; set; }
+        public string userName { get; set; }
 
-        public byte[] PasswordHash { get; set; }
+        public string PhotoUrl { get; set; }
 
-        public byte[] PasswordSalt { get; set; }
-
-        public DateTime DateOfBirth {get;set;}
+        public int  Age {get;set;}
 
         public string KnownAs { get; set; }
 
-        public DateTime Create { get; set; } = DateTime.Now;
+        public DateTime Create { get; set; }
 
         public DateTime LastActive { get; set; }
 
@@ -31,6 +28,6 @@ namespace DatingApp_Api.Enitites
 
         public string Country { get; set; }
 
-        public ICollection<Photo> Photos { get; set; }
+        public virtual ICollection<PhotoDto> Photos { get; set; }
     }
 }

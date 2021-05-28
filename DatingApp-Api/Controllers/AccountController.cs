@@ -24,14 +24,13 @@ namespace DatingApp_Api.Controllers
         [HttpPost("Register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
-            if (await UserExist(registerDto.UserName.ToLower())) return BadRequest("UserName is Taken");
+            if (await UserExist(registerDto.username.ToLower())) return BadRequest("UserName is Taken");
 
             var hmac = new HMACSHA512();
             var user = new AppUser
             {
-                UserName = registerDto.UserName.ToLower(),
-                Email = registerDto.Email,
-                Password = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
+                UserName = registerDto.username.ToLower(),
+                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.password)),
                 PasswordSalt = hmac.Key,
             };
             _context.AppUsers.Add(user);
@@ -52,9 +51,9 @@ namespace DatingApp_Api.Controllers
             var hmac = new HMACSHA512(user.PasswordSalt);
             var pass = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
 
-            for (int i = 0; i < user.Password.Length; i++)
+            for (int i = 0; i < user.PasswordHash.Length; i++)
             {
-                if (user.Password[i] != pass[i]) return Unauthorized("password not found");
+                if (user.PasswordHash[i] != pass[i]) return Unauthorized("password not found");
             }
 
               return new UserDto
