@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using DatingApp_Api.Data.Repository;
 using DatingApp_Api.Interface;
 using DatingApp_Api.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DatingApp_Api.Controllers
 {
+    [Authorize]
     public class UsersController : BaseController
     {
         private readonly IUserRepository _userRepository;

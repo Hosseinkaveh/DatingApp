@@ -2,7 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { ToastrModule } from 'ngx-toastr';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import {NgxGalleryModule} from '@kolkov/ngx-gallery';
 
 
 
@@ -10,17 +12,21 @@ import { ToastrModule, ToastrService } from 'ngx-toastr';
   declarations: [],
   imports: [
     CommonModule,
-     BsDropdownModule.forRoot(),
+    BsDropdownModule.forRoot(),
     BrowserAnimationsModule,
     ToastrModule.forRoot({
      positionClass: 'toast-bottom-right',
 
     }),
+    TabsModule.forRoot(),
+    NgxGalleryModule
   ],
   exports:[
     BsDropdownModule,
     BrowserAnimationsModule,
     ToastrModule,
+    TabsModule,
+    NgxGalleryModule,
 
   ]
 })
