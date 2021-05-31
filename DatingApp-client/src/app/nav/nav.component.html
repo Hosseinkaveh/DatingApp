@@ -15,16 +15,16 @@
       </ul>
 
       <div class="dropdown text-end" dropdown *ngIf="accountService.currentUser$ | async">
-        <a href="#" class="d-block text-white text-decoration-none dropdown-toggle" dropdownToggle >
+        <a  class="d-block text-white text-decoration-none dropdown-toggle" dropdownToggle >
           <img src="https://github.com/mdo.png" alt="mdo" width="42" height="42" class="rounded-circle" >
           Welcome User
         </a>
         <ul class="dropdown-menu text-small mt-3" *bsDropdownMenu >
-          <li><a class="dropdown-item" href="#">New project...</a></li>
-          <li><a class="dropdown-item" href="#">Settings</a></li>
-          <li><a class="dropdown-item" href="#">Profile</a></li>
+          <li><a class="dropdown-item">New project...</a></li>
+          <li><a class="dropdown-item">Settings</a></li>
+          <li><a class="dropdown-item" routerLink='/member/edit'>Profile</a></li>
           <li><hr class="dropdown-divider"></li>
-          <li><a href="/" class="dropdown-item" (click)="LogOut()">Sign out</a></li>
+          <li><a class="dropdown-item" (click)="LogOut()">Sign out</a></li>
         </ul>
       </div>
 

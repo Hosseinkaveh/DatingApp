@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { member } from 'src/app/_models/member';
-import { AccountService } from 'src/app/_services/account.service';
 import { MembersService } from 'src/app/_services/members.service';
 import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation } from '@kolkov/ngx-gallery';
 
@@ -51,7 +50,7 @@ export class MemberDetailComponent implements OnInit {
     this.memberService.getMember(this.router.snapshot.paramMap.get('username')).subscribe(member =>{
       this.member = member;
     this.galleryImages = this.getImages();
- 
+
     })
 
   }
