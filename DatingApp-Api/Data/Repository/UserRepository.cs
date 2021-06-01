@@ -38,6 +38,7 @@ namespace DatingApp_Api.Data.Repository
         {
             return await _context.AppUsers
             .Where(x => x.UserName == username.ToLower())
+            .Include(p =>p.Photos)
             .SingleOrDefaultAsync();
         }
 

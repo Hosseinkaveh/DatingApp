@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,14 +39,15 @@ namespace DatingApp_Api.Controllers
             return new UserDto
             {
                 UserName = user.UserName,
-                Token =_tokenService.CreateToken(user)
+                Token =_tokenService.CreateToken(user),
+                PhotoUrl = user.Photos.FirstOrDefault(x =>x.IsMain)?.Url
             };
 
         }
         [HttpPost("Login")]
         public async Task<ActionResult<UserDto>> Login(loginDto loginDto)
         {
-            AppUser user = await _context.AppUsers.FirstOrDefaultAsync(x => x.UserName == loginDto.UserName.ToLower());
+            AppUser user = await _context.AppUsers.Include(x =>x.Photos).FirstOrDefaultAsync(x => x.UserName == loginDto.UserName.ToLower());
             if (user == null) return Unauthorized("UserName not valid");
             
             var hmac = new HMACSHA512(user.PasswordSalt);
@@ -59,7 +61,9 @@ namespace DatingApp_Api.Controllers
               return new UserDto
             {
                 UserName = user.UserName,
-                Token =_tokenService.CreateToken(user)
+                Token =_tokenService.CreateToken(user),
+                PhotoUrl = user.Photos.FirstOrDefault(x =>x.IsMain)?.Url
+
             };
             
 

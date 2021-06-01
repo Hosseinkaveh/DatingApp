@@ -4,6 +4,7 @@ import { of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { member } from '../_models/member';
+import { Photo } from '../_models/Photo';
 
 // const options ={
 //   headers:new HttpHeaders({
@@ -47,6 +48,15 @@ export class MembersService {
          this.member[index] = member;
        })
      );
+   }
+   UpdateMainPhoto(photoid){
+     return this.http.put(this.baseUrl + 'users/set-main-photo/' + photoid,{});
+
+   }
+
+   DeletePhoto(photoid)
+   {
+    return this.http.delete(this.baseUrl +'Users/delete-photo/'+ photoid)
    }
 
 

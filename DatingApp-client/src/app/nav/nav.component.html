@@ -14,10 +14,10 @@
 
       </ul>
 
-      <div class="dropdown text-end" dropdown *ngIf="accountService.currentUser$ | async">
+      <div class="dropdown text-end" dropdown *ngIf="(accountService.currentUser$ | async) as User">
         <a  class="d-block text-white text-decoration-none dropdown-toggle" dropdownToggle >
-          <img src="https://github.com/mdo.png" alt="mdo" width="42" height="42" class="rounded-circle" >
-          Welcome User
+          <img src="{{User.photoUrl }}" alt="mdo" width="42" height="42" class="rounded-circle" >
+          Welcome {{User.userName }}
         </a>
         <ul class="dropdown-menu text-small mt-3" *bsDropdownMenu >
           <li><a class="dropdown-item">New project...</a></li>
