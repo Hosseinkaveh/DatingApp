@@ -1,5 +1,6 @@
 import { Component, OnInit, Output,EventEmitter } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AccountService } from '../_services/account.service';
 
@@ -13,18 +14,25 @@ export class RegisterComponent implements OnInit {
   model:any={};
   registerForm:FormGroup;
   @Output() CancelReg = new EventEmitter();
+  validationErrors:string[]=[];
 
-  constructor(private accountService:AccountService,private toastrService:ToastrService) { }
+  constructor(private accountService:AccountService,private toastrService:ToastrService,
+    private fb:FormBuilder,private router:Router) { }
 
   ngOnInit(): void {
     this.initializeForm();
   }
 
   initializeForm(){
-    this.registerForm = new FormGroup({
-      username: new FormControl('',Validators.required),
-      password: new FormControl('',[Validators.required,Validators.minLength(4),Validators.maxLength(8)]),
-      confirmPassword: new FormControl('',[Validators.required,this.matchValue('password')])
+    this.registerForm = this.fb.group({
+      Gender: ['mail'],
+      username: ['',Validators.required],
+      KnownAs: ['',Validators.required],
+      DateOfBirth: ['',Validators.required],
+      City: ['',Validators.required],
+      Contry: ['',Validators.required],
+      password: ['',[Validators.required,Validators.minLength(4),Validators.maxLength(8)]],
+      confirmPassword: ['',[Validators.required,this.matchValue('password')]]
     })
     this.registerForm.controls['password'].valueChanges.subscribe(() =>{
       this.registerForm.controls['confirmPassword'].updateValueAndValidity()
@@ -44,14 +52,11 @@ export class RegisterComponent implements OnInit {
   }
 
   Register(){
-    console.log(this.registerForm.value);
-
-    // this.accountService.register(this.model).subscribe(x =>{
-    //   this.CancelRegister();
-    // },error=>{
-    //   console.log(error);
-    //   this.toastrService.error(error.error)
-    // });
+    this.accountService.register(this.registerForm.value).subscribe(x =>{
+        this.router.navigateByUrl('/members');
+    },error=>{
+      this.validationErrors = error;
+    });
   }
 
 }

@@ -1,50 +1,46 @@
-<form [formGroup]='registerForm' (ngSubmit)="Register()" autocomplete="off">
+<form [formGroup]='registerForm' (ngSubmit)="registerForm.valid && Register()" autocomplete="off">
   <h1 class="text-center text-primary">Sign Up</h1>
 <hr>
-  <div class="mb-3">
-    <input
-    [class.is-invalid] = 'registerForm.get("username").errors &&
-    registerForm.get("username").touched'
-     type="text"
-     formControlName='username'
-     name="UserName"
-     class="form-control"
-     placeholder="UserName">
-     <div class="invalid-feedback text-start">Please enter a username</div>
-  </div>
+ <label class="me-3"> <strong>I am a: </strong></label>
+ <div class="form-radio form-check-inline mb-3">
 
-  <div class="mb-3">
-    <input
-    [class.is-invalid] = 'registerForm.get("password").errors &&
-    registerForm.get("password").touched'
-    type="password"
-    formControlName='password'
-    name="Password"
-    class="form-control"
-    placeholder="Password">
-    <div *ngIf="registerForm.get('password').hasError('required')"
-    class="invalid-feedback text-start">Please enter a password</div>
+  <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="mail">
+  <label class="form-check-label" for="inlineCheckbox1">mail</label>
+</div>
+<div class="form-check form-check-inline">
+  <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="femail">
+  <label class="form-check-label" for="inlineCheckbox2">femail</label>
+</div>
 
-    <div *ngIf="registerForm.get('password').hasError('minlength')"
-    class="invalid-feedback text-start">password must be at least 4 charecters</div>
+ <app-text-input  [formControl]='registerForm.controls["username"]'
+   [label]='"Username"'   [type]='"text"'></app-text-input>
 
-    <div *ngIf="registerForm.get('password').hasError('maxlength')"
-    class="invalid-feedback text-start">Password must be at most 8 charecters</div>
-  </div>
+   <app-text-input  [formControl]='registerForm.controls["KnownAs"]'
+   [label]='"KnownAs"'  [type]='"text"'></app-text-input>
 
-  <div class="mb-3">
-    <input
-    [class.is-invalid] = 'registerForm.get("confirmPassword").errors &&
-    registerForm.get("confirmPassword").touched'
-    type="password"
-    formControlName='confirmPassword'
-    name="ConfirmPassword"
-    class="form-control"
-    placeholder="ConfirmPassword">
-    <div *ngIf="registerForm.get('confirmPassword').hasError('required')"
-    class="invalid-feedback text-start">Please enter a confirmPassword</div>
-    <div *ngIf="registerForm.get('confirmPassword').hasError('isMatching')"
-    class="invalid-feedback text-start">confirm Password must match password</div>
+   <app-date-input  [formControl]='registerForm.controls["DateOfBirth"]'
+   [label]='"DateOfBirth"'  ></app-date-input>
+
+   <app-text-input  [formControl]='registerForm.controls["City"]'
+   [label]='"City"'   [type]='"text"'></app-text-input>
+
+   <app-text-input  [formControl]='registerForm.controls["Contry"]'
+   [label]='"Contry"'   [type]='"text"'></app-text-input>
+
+ <app-text-input [formControl]='registerForm.controls["password"]'
+  [label]='"Password"' [type]='"password"'></app-text-input>
+
+  <app-text-input [formControl]='registerForm.controls["confirmPassword"]'
+   [label]='"Confirm Password"' [type]='"password"'></app-text-input>
+
+   <div class="row mt-5" *ngIf="validationErrors.length > 0">
+
+    <ul class="text-danger">
+      <li *ngFor="let error of validationErrors">
+          {{error}}
+      </li>
+    </ul>
+
   </div>
 
   <div class="text-center">
