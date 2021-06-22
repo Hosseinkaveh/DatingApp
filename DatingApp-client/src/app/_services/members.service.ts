@@ -1,10 +1,13 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { member } from '../_models/member';
-import { Photo } from '../_models/Photo';
+import { PageInationResult } from '../_models/PageInation';
+import { User } from '../_models/User';
+import { UserParams } from '../_models/userParams';
+import { AccountService } from './account.service';
 
 // const options ={
 //   headers:new HttpHeaders({
@@ -18,25 +21,73 @@ import { Photo } from '../_models/Photo';
 
 export class MembersService {
   baseUrl = environment.apiUrl;
-  member:member[]=[];
+  members:member[]=[];
+  user:User;
+  userParams:UserParams;
+  memberCatch = new Map();
 
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient,private accountService: AccountService) {
+    this.accountService.currentUser$.pipe(take(1)).subscribe(x =>{
+      this.user = x;
+      this.userParams = new UserParams(this.user);
+    })
 
-  getMembers(){
-    if(this.member.length > 0) {
-      return of(this.member)
+
+   }
+
+  getMembers(userParams:UserParams){
+    var response = this.memberCatch.get(Object.values(userParams).join('-'))
+    if(response)
+    {
+      return of(response);
     }
-   return this.http.get<member[]>(this.baseUrl + 'Users').pipe(
-     map(members =>{
-       this.member = members;
-       return members;
-       })
-   )
+
+    let params = this.setParams(userParams.pageNumber,userParams.pageSize);
+
+    params = params.append('gender',userParams.gender);
+    params = params.append('minAge',userParams.minAge.toString());
+    params = params.append('maxAge',userParams.maxAge.toString());
+    params = params.append('OrderBy',userParams.orderBy);
+    
+   return this.getPageinationResult<member[]>(this.baseUrl + 'Users',params)
+   .pipe(map(response =>{
+     this.memberCatch.set(Object.values(userParams).join('-'),response);
+     return response;
+   }))
+  }
+    
+  
+  private getPageinationResult<T>(url , params) {
+    const pageInatedResult: PageInationResult<T> = new PageInationResult<T>();
+
+    return this.http.get<T>(url, { observe: 'response', params }).pipe(
+      map(response => {
+        pageInatedResult.result = response.body;
+        if (response.headers.get('pageination') !== null) {
+
+          pageInatedResult.pageination = JSON.parse(response.headers.get('pageination'));
+        }
+        return pageInatedResult;
+
+      })
+    );
+  }
+
+  private setParams(PageNumber:number,PageSize:number) {
+    let params = new HttpParams();
+    params = params.append('PageNumber', PageNumber.toString());
+    params = params.append('PageSize', PageSize.toString());
+    return params;
   }
 
   getMember(username:string){
-   const member =  this.member.find(x =>x.userName === username);
-   if(member !== undefined) return of(member)
+    const member = [...this.memberCatch.values()]
+    .reduce((arr,elem)=>arr.concat(elem.result),[])
+    .find((member:member)=>member.userName === username);
+    if(member){
+    return of(member)
+    }
+   
     return this.http.get<member>(this.baseUrl + 'Users/' + username )
    }
 
@@ -44,8 +95,8 @@ export class MembersService {
    {
      return this.http.put(this.baseUrl+'users',member).pipe(
        map(()=>{
-         const index = this.member.indexOf(member);
-         this.member[index] = member;
+         const index = this.members.indexOf(member);
+         this.members[index] = member;
        })
      );
    }
@@ -57,6 +108,18 @@ export class MembersService {
    DeletePhoto(photoid)
    {
     return this.http.delete(this.baseUrl +'Users/delete-photo/'+ photoid)
+   }
+
+   getUserParams(){
+     return this.userParams;
+   }
+   resetUserParams(){
+     this.userParams = new UserParams(this.user);
+     return this.userParams;
+   }
+   setUserParams(params:UserParams){
+     this.userParams = params;
+
    }
 
 

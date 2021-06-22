@@ -10,6 +10,7 @@ using DatingApp_Api.Enitites;
 using DatingApp_Api.Extension;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
+using DatingApp_Api.Helpers;
 
 namespace DatingApp_Api.Controllers
 {
@@ -27,9 +28,19 @@ namespace DatingApp_Api.Controllers
 
         }
         [HttpGet]
-        public async Task<ActionResult<List<MemberDto>>> GetUsers()
+        public async Task<ActionResult<List<MemberDto>>> GetUsers([FromQuery]UserParams param)
         {
-            return await _userRepository.GetMemberAsync();
+            var CurrentUser = await  _userRepository.GetUserByUsernameAsync(User.GetUsername());
+            param.CurrentUserName = CurrentUser.UserName;
+            
+            if(string.IsNullOrEmpty(param.Gender))
+            param.Gender = CurrentUser.Gender == "male" ? "female":"male";
+
+
+            var users = await _userRepository.GetMemberAsync(param);
+
+            Response.AddPageInationHeaders(users.PageNumber,users.TotalPage,users.PageSize,users.TotalCount);
+            return Ok(users);
         }
 
         [HttpGet("{username}",Name ="GetUser")]

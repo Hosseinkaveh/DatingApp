@@ -19,6 +19,6 @@ namespace DatingApp_Api.DTOs
 
         [Required]
         [Compare("password")]
-        public string ComperPassword { get; set; }
+        public string confirmPassword { get; set; }
     }
 }

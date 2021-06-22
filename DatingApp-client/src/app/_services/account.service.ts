@@ -27,6 +27,8 @@ export class AccountService {
     );
   }
   register(model:any){
+    console.log(model);
+    
    return this.http.post(this.baseUrl+'Account/register',model).pipe(
       map((response:User) =>{
         const user = response;
@@ -43,6 +45,7 @@ export class AccountService {
 
 
   setCurrentUser(user:User){
+    localStorage.setItem('user',JSON.stringify(user));
     this.currentUserSource.next(user)
   }
 
