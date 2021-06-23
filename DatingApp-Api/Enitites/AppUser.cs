@@ -32,5 +32,9 @@ namespace DatingApp_Api.Enitites
         public string Country { get; set; }
 
         public ICollection<Photo> Photos { get; set; }
+
+        public ICollection<UserLike> LikedByUser { get; set; } //who has liked the currently user
+
+        public ICollection<UserLike> LikedUser { get; set; } //currently logged in user has like 
     }
 }
