@@ -12,7 +12,7 @@ namespace DatingApp_Api.Enitites
 
         public byte[] PasswordSalt { get; set; }
 
-        public DateTime DateOfBirth {get;set;}
+        public DateTime DateOfBirth { get; set; }
 
         public string KnownAs { get; set; }
 
@@ -36,5 +36,8 @@ namespace DatingApp_Api.Enitites
         public ICollection<UserLike> LikedByUser { get; set; } //who has liked the currently user
 
         public ICollection<UserLike> LikedUser { get; set; } //currently logged in user has like 
+
+        public ICollection<Message> MessagesSent { get; set; }
+        public ICollection<Message> MessagesReceived { get; set; }
     }
 }

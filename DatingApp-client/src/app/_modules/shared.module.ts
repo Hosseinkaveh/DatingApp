@@ -23,9 +23,9 @@ import { TimeagoModule } from 'ngx-timeago';
      positionClass: 'toast-bottom-right',
 
     }),
-    TabsModule.forRoot(),
     NgxGalleryModule,
     FileUploadModule,
+    TabsModule.forRoot(),
     BsDatepickerModule.forRoot(),
     PaginationModule.forRoot(),
     ButtonsModule.forRoot(),
