@@ -25,8 +25,8 @@ namespace DatingApp_Api.Controllers
             _mapper = mapper;
             _photoservice = photoservice;
             _userRepository = userRepository;
-
         }
+      //  [Authorize(Roles ="Admin")]
         [HttpGet]
         public async Task<ActionResult<List<MemberDto>>> GetUsers([FromQuery] UserParams param)
         {
@@ -44,6 +44,7 @@ namespace DatingApp_Api.Controllers
             return Ok(users);
         }
 
+        //[Authorize(Roles ="Member")]
         [HttpGet("{username}", Name = "GetUser")]
         public async Task<ActionResult<MemberDto>> GetUsers(string username)
         {

@@ -9,6 +9,7 @@
           <li><a class="nav-link px-2 " routerLink='/members' routerLinkActive='active'>Matches</a></li>
           <li><a class="nav-link px-2 " routerLink='/lists' routerLinkActive='active'>List</a></li>
           <li><a class="nav-link px-2 " routerLink='/messages'  routerLinkActive='active'>Messages</a></li>
+          <li><a class="nav-link px-2 " *appHasRole='["Admin","moderator"]' routerLink='/admin'  routerLinkActive='active'>admin</a></li>
           <li><a class="nav-link px-2 " routerLink='/error'  routerLinkActive='active'>error</a></li>
         </ng-container>
 
@@ -17,7 +18,7 @@
       <div class="dropdown text-end" dropdown *ngIf="(accountService.currentUser$ | async) as User">
         <a  class="d-block text-white text-decoration-none dropdown-toggle" dropdownToggle >
           <img src="{{User.photoUrl }}" alt="mdo" width="42" height="42" class="rounded-circle" >
-          Welcome {{User.KnownAs | titlecase }}
+          Welcome {{User.KnownAs || User.userName | titlecase }}
         </a>
         <ul class="dropdown-menu text-small mt-3" *bsDropdownMenu >
           <li><a class="dropdown-item">New project...</a></li>

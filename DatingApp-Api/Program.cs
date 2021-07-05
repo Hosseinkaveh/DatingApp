@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DatingApp_Api.Data;
+using DatingApp_Api.Enitites;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,8 +24,10 @@ namespace DatingApp_Api
           try
           {
               DataContext context = service.GetRequiredService<DataContext>();
+              var userManager = service.GetRequiredService<UserManager<AppUser>>();
+              var roleManager = service.GetRequiredService<RoleManager<AppRole>>();
               await context.Database.MigrateAsync();
-              await Seed.UserSeed(context);
+              await Seed.UserSeed(userManager,roleManager);
           }
           catch (System.Exception ex)
           {

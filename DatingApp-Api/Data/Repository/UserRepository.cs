@@ -24,7 +24,7 @@ namespace DatingApp_Api.Data.Repository
         }
         public async Task<MemberDto> GetMemberAsync(string username)
         {
-            return await _context.AppUsers
+            return await _context.Users
             .Where(x => x.UserName == username.ToLower())
             .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
             .SingleOrDefaultAsync();
@@ -33,12 +33,12 @@ namespace DatingApp_Api.Data.Repository
 
         public async Task<AppUser> GetUserByIdAsync(int id)
         {
-            return await _context.AppUsers.FindAsync(id);
+            return await _context.Users.FindAsync(id);
         }
 
         public async Task<AppUser> GetUserByUsernameAsync(string username)
         {
-            return await _context.AppUsers
+            return await _context.Users
             .Where(x => x.UserName == username.ToLower())
             .Include(p =>p.Photos)
             .SingleOrDefaultAsync();
@@ -46,7 +46,7 @@ namespace DatingApp_Api.Data.Repository
 
         public async Task<PageList<MemberDto>> GetMemberAsync(UserParams userParams)
         {
-            var query = _context.AppUsers.AsQueryable();
+            var query = _context.Users.AsQueryable();
 
             query = query.Where(x => x.UserName != userParams.CurrentUserName);
             query = query.Where(x => x.Gender == userParams.Gender);

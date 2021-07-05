@@ -17,7 +17,7 @@ namespace DatingApp_Api.Controllers
       [HttpGet("not-found")]
         public ActionResult<AppUser> GetNotFound()
         {
-            var things = _context.AppUsers.Find(-1);
+            var things = _context.Users.Find(-1);
             if(things == null) return NotFound();
             return things;
 
@@ -33,7 +33,7 @@ namespace DatingApp_Api.Controllers
         [HttpGet("server-error")]
         public ActionResult<string> GetServerError()
         {
-            var thing = _context.AppUsers.Find(-1);
+            var thing = _context.Users.Find(-1);
 
             var thingToReturn = thing.ToString();
 
