@@ -3,6 +3,7 @@ using DatingApp_Api.Data.Repository;
 using DatingApp_Api.Helpers;
 using DatingApp_Api.Interface;
 using DatingApp_Api.Service;
+using DatingApp_Api.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +16,7 @@ namespace DatingApp_Api.Extension
           this IServiceCollection services, IConfiguration config)
         {
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
+            services.AddSingleton<PresenceTracker>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPhotoService, PhotoService>();
