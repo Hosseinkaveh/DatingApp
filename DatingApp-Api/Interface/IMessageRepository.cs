@@ -18,10 +18,10 @@ namespace DatingApp_Api.Interface
         void DeleteMessage(Message message);
         Task<Message> GetMessage(int id);
 
+        Task<bool> SaveChangeAsync();
+
         Task<PageList<MessageDto>> GetMessageForUser(MessageParams messageParams);
         Task<IEnumerable<MessageDto>> GetMessageThread(string currentUsername, string recipientname);
-
-        Task<bool> SaveAllAsync();
 
 
     }

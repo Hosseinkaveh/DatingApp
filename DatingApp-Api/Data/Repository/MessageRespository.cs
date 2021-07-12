@@ -112,17 +112,17 @@ namespace DatingApp_Api.Data.Repository
           _context.Connections.Remove(connection);
         }
 
-        public async Task<bool> SaveAllAsync()
-        {
-            return await _context.SaveChangesAsync() > 0;
-        }
-
         public async Task<Group> GetGroupForConnection(string connectionId)
         {
             return await _context.Groups
             .Include(x =>x.Connections)
             .Where(c =>c.Connections.Any(x =>x.ConnectionId == connectionId))
             .FirstOrDefaultAsync();
+        }
+
+        public async Task<bool> SaveChangeAsync()
+        {
+          return  await _context.SaveChangesAsync() > 0;
         }
     }
 }

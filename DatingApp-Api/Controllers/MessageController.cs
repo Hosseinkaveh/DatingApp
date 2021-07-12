@@ -14,15 +14,14 @@ namespace DatingApp_Api.Controllers
     [Authorize]
     public class MessageController : BaseController
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IMessageRepository _messageRepository;
-        private readonly IMapper _mapper;
 
-        public MessageController(IUserRepository userRepository, IMessageRepository messageRepository, IMapper mapper)
+        private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
+
+        public MessageController(IUnitOfWork unitOfWork, IMapper mapper)
         {
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _userRepository = userRepository;
-            _messageRepository = messageRepository;
         }
 
         [HttpPost]
@@ -33,8 +32,8 @@ namespace DatingApp_Api.Controllers
             if (username == createMessageDto.RecipieantUserName.ToLower())
                 return BadRequest("You cannot like yourself");
 
-            var sender = await _userRepository.GetUserByUsernameAsync(username);
-            var recipient = await _userRepository.GetUserByUsernameAsync(createMessageDto.RecipieantUserName);
+            var sender = await _unitOfWork.UserRepository.GetUserByUsernameAsync(username);
+            var recipient = await _unitOfWork.UserRepository.GetUserByUsernameAsync(createMessageDto.RecipieantUserName);
 
             if (recipient == null) return NotFound();
 
@@ -47,8 +46,8 @@ namespace DatingApp_Api.Controllers
                 SenderUsername = sender.UserName
             };
 
-            _messageRepository.AddMessage(message);
-            if (await _messageRepository.SaveAllAsync()) return Ok(_mapper.Map<MessageDto>(message));
+            _unitOfWork.MessageRepository.AddMessage(message);
+            if (await _unitOfWork.Complete()) return Ok(_mapper.Map<MessageDto>(message));
 
 
             return BadRequest("Faild to send Message");
@@ -62,7 +61,7 @@ namespace DatingApp_Api.Controllers
         {
             messageParams.UserName = User.GetUsername();
 
-            var messages = await _messageRepository.GetMessageForUser(messageParams);
+            var messages = await _unitOfWork.MessageRepository.GetMessageForUser(messageParams);
 
             Response.AddPageInationHeaders(messages.PageNumber, messages.TotalPage
             , messages.PageSize, messages.TotalCount);
@@ -71,33 +70,26 @@ namespace DatingApp_Api.Controllers
 
         }
 
-        [HttpGet("thread/{username}")]
-        public async Task<ActionResult<IEnumerable<MessageDto>>> GetMessageThread(string username)
-        {
-            var currentUsername = User.GetUsername();
-            return Ok(await _messageRepository.GetMessageThread(currentUsername, username));
-        }
-
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteMessage(int id)
         {
             var usernaem = User.GetUsername();
 
-            var message = await _messageRepository.GetMessage(id);
+            var message = await _unitOfWork.MessageRepository.GetMessage(id);
 
-            if(message.Sender.UserName != usernaem && message.Recipient.UserName != usernaem)
-            return Unauthorized();
+            if (message.Sender.UserName != usernaem && message.Recipient.UserName != usernaem)
+                return Unauthorized();
 
-            if(message.Sender.UserName == usernaem) message.SenderDeleted = true;
-            if(message.Recipient.UserName == usernaem) message.RecipientDeleted = true;
+            if (message.Sender.UserName == usernaem) message.SenderDeleted = true;
+            if (message.Recipient.UserName == usernaem) message.RecipientDeleted = true;
 
-            if(message.SenderDeleted && message.RecipientDeleted)
-            _messageRepository.DeleteMessage(message);
+            if (message.SenderDeleted && message.RecipientDeleted)
+                _unitOfWork.MessageRepository.DeleteMessage(message);
 
-            if(await _messageRepository.SaveAllAsync()) return Ok();
+            if (await _unitOfWork.Complete()) return Ok();
 
             return BadRequest("problem deleting the message");
-             
+
         }
     }
 }

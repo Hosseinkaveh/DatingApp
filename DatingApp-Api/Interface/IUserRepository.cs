@@ -13,7 +13,6 @@ namespace DatingApp_Api.Interface
         Task<AppUser> GetUserByIdAsync(int id);
         Task<MemberDto> GetMemberAsync(string username);
          void Update(AppUser user);
-          Task<bool> SaveAllAsync();
         
     }
 }

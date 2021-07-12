@@ -35,7 +35,10 @@ namespace DatingApp_Api
             services.AddControllers();
             services.AddCors();
             services.AddIdentityService(_config);
-            services.AddSignalR();
+            services.AddSignalR(o =>
+           {
+                 o.EnableDetailedErrors = true;
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "DatingApp_Api", Version = "v1" });
@@ -59,7 +62,7 @@ namespace DatingApp_Api
             app.UseCors(x => x.AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials()
-                .WithOrigins("http://localhost:4200"));
+                .WithOrigins("http://localhost:4200","http://192.168.1.52:4200"));
 
             app.UseAuthentication();
             app.UseAuthorization();

@@ -18,11 +18,10 @@ namespace DatingApp_Api.Extension
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
             services.AddSingleton<PresenceTracker>();
             services.AddScoped<ITokenService, TokenService>();
-            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPhotoService, PhotoService>();
-            services.AddScoped<ILikesRepository, LikesRepository>();
-            services.AddScoped<IMessageRepository, MessageRespository>();
-            services.AddScoped<LogUserActivity>();
+            services.AddScoped<IUnitOfWork,UnitOfWork>();
+            services.AddScoped<IMessageRepository,MessageRespository>();
+         services.AddScoped<LogUserActivity>();
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
             services.AddDbContext<DataContext>(options =>
             {
